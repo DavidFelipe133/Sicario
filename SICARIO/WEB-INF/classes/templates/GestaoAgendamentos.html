@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Sicário - Agendamentos</title>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Menu lateral -->
+        <nav class="bg-dark text-white vh-100 p-3" style="width: 250px;">
+            <h3 class="text-center">Menu</h3>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-3">
+                    <a th:href="@{/CadastrarAgendamento}" class="btn btn-primary w-100">Inserir Agendamento</a>
+                </li>
+                <li class="nav-item mb-3">
+                    <a th:href="@{/CadastrarCliente}" class="btn btn-primary w-100">Inserir Cliente</a>
+                </li>
+                <li class="nav-item mb-3">
+                    <a th:href="@{/CadastrarFuncionario}" class="btn btn-primary w-100">Inserir Funcionário</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/tela-inicio}" class="btn btn-danger w-100">Sair</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="container mt-4 ms-3">
+            <h1 class="text-center">Gestão de Agendamentos</h1>
+            <h2 class="text-center">Lista de Agendamentos</h2>
+            
+            <table class="table table-striped table-bordered mt-4">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Funcionário</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="agendamento : ${agendamentos}">
+                        <td th:text="${agendamento.id}"></td>
+                        <!-- comment<td th:text="${agendamento.cliente != null? agendamentos.cliente.nome : 'Sem Cliente'}"></td>-->
+                        <td th:text="${agendamento.cliente != null ? agendamento.cliente.nome : 'Sem Cliente'}"></td>
+                        <td th:text="${agendamento.func != null ? agendamento.func.nome : 'Sem funcionário'}"></td>
+                        <td th:text="${agendamento.descricao}"></td>
+                        <td th:text="${agendamento.valor}"></td>
+                        <td>
+                            <span th:text="${agendamento.status}"></span>
+                            <a th:if="${agendamento.status == 'A Fazer'}" 
+                               th:href="@{/concluir/{id}(id=${agendamento.id})}" 
+                               class="btn btn-success btn-sm mt-1">Concluir</a>
+                        </td>
+                        <td>
+                            <a th:href="@{/cadastrarAgendamento/{id}(id=${agendamento.id})}"
+                               class="btn btn-warning btn-sm">Editar</a>
+                            <a th:href="@{/agendamentos/excluir-agendamento/{id}(id=${agendamento.id})}" 
+                               class="btn btn-danger btn-sm">Excluir</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

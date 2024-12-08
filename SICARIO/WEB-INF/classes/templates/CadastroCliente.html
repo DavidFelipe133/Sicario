@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Cadastro de Cliente</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Cadastro de Cliente</h1>
+        <form th:action="@{/guardar-cliente}" method="POST" id="cliente-form" class="mt-4">
+
+            
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome do Cliente:</label>
+                <input type="text" id="nome" name="nome" class="form-control" required>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a th:href="@{/Agendamentos}" class="btn btn-info" role="button">Voltar</a>
+
+
+                <button type="submit" class="btn btn-success">Salvar</button>
+            </div>
+        </form>
+        <div id="success-message" style="display: none; margin-top: 10px;" class="alert alert-success">
+                    Cliente cadastrado com sucesso!
+        </div>
+        <h2 class="mt-5">Clientes Cadastrados</h2>
+          <ul class="list-group">
+            <li th:each="cliente : ${clientes}" class="list-group-item">
+                <span th:text="${cliente.nome}"></span>
+            <a th:href="@{/excluir-cliente/{id}(id=${cliente.id})}" class="btn btn-danger btn-sm float-end">Excluir</a>
+              <!-- commen    <a th:href="@{/excluir-cliente/{id}(id=${cliente.id})}" 
+                   class="btn btn-danger btn-sm float-end" 
+                   onclick="return confirmDelete()">Excluir</a>-->
+            </li>
+        </ul>
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            <span th:text="${errorMessage}"></span>
+        </div>
+        <div id="message" style="display: none; margin-top: 10px;" class="alert alert-success">
+                    Cliente relacionado a um agendamento!
+        </div>
+
+        
+    </div> <!--
+    <script>
+    function confirmDelete() {
+    const confirmation = confirm("Você tem certeza que deseja excluir? Excluindo o Cliente, todos os agendamentos relacionados serão apagados.")
+    return confirmation;  
+    }
+    </script>-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById("cliente-form");
+            
+            if (form) {
+                form.addEventListener("submit", function(event) {
+                    // Lógica de validação do formulário (se necessário)
+                    let isValid = true;  // Defina sua lógica de validação aqui
+
+                    // Se o formulário for inválido, impedir o envio e exibir mensagem de erro
+                    if (!isValid) {
+                        event.preventDefault();
+                        const errorMessage = document.getElementById("error-message");
+                        errorMessage.style.display = "block";
+                    } else {
+                        // Exibir mensagem de sucesso
+                        const successMessage = document.getElementById("success-message");
+                        successMessage.style.display = "block";
+
+                        // Ocultar a mensagem após 5 segundos
+                        setTimeout(() => {
+                            successMessage.style.display = "none";
+                        }, 5000);
+                    }
+                });
+            }
+        });
+        
+     </script> 
+</html>

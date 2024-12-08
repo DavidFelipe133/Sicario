@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Cadastro de Funcionário</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Cadastro de Funcionário</h1>
+        <form id="funcionario-form" action="/guardar-funcionario" method="POST" class="mt-4">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome do Funcionário:</label>
+                <input type="text" id="nome" name="nome" class="form-control" required>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a th:href="@{/Agendamentos}" class="btn btn-info" role="button">Voltar</a>
+                <button type="submit" class="btn btn-success">Salvar</button>
+            </div>
+        </form>
+
+        <div id="success-message" style="display: none; margin-top: 10px;" class="alert alert-success">
+            Funcionário cadastrado com sucesso!
+        </div>
+        <div id="error-message" style="display: none; margin-top: 10px;" class="alert alert-danger">
+            Funcionário não cadastrado! Tente novamente.
+        </div>
+
+        <h2 class="mt-5">Funcionários Cadastrados</h2>
+        <ul class="list-group">
+            <!-- Iteração da lista de funcionários -->
+            <li th:each="funcionario : ${funcionarios}" class="list-group-item">
+                <span th:text="${funcionario.nome}"></span>
+                <a th:href="@{/excluir-funcionario/{id}(id=${funcionario.id})}" class="btn btn-danger btn-sm float-end">Excluir</a>
+            </li>
+        </ul>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <span th:text="${errorMessage}"></span>
+    </div>
+  <!--  <script>
+    function confirmDelete() {
+        const confirmation = confirm("Você tem certeza que deseja excluir? Excluindo o funcionário, todos os agendamentos relacionados serão apagados.");
+        return confirmation;  
+    }
+    </script>-->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById("funcionario-form");
+            
+            if (form) {
+                form.addEventListener("submit", function(event) {
+                    
+                    let isValid = true;  
+
+                  
+                    if (!isValid) {
+                        event.preventDefault();
+                        const errorMessage = document.getElementById("error-message");
+                        errorMessage.style.display = "block";
+                    } else {
+                     
+                        const successMessage = document.getElementById("success-message");
+                        successMessage.style.display = "block";
+
+                        
+                        setTimeout(() => {
+                            successMessage.style.display = "none";
+                        }, 5000);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

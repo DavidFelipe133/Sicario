@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <title>Cadastro de Serviço</title>
+    </head>
+    <body>
+        <div class="container mt-5">
+            
+            <h2 class="mt-5">
+            <span th:if="${agendamento.id == null}">Cadastrar</span>
+            <span th:if="${agendamento.id != null}">Editar</span> Agendamento
+            </h2>
+            
+            <form action="/guardar-agendamento" method="POST" id="agendamento-form" class="mt-4">
+                
+            <input type="hidden" id="id" name="id" th:value="${agendamento.id}">
+              
+        
+              <div class="mb-3"> 
+                <label for="valor" class="form-label">Valor:</label>
+                <input type="text" id="valor" name="valor" class="form-control" th:value="${agendamento.valor}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição do Serviço:</label>
+                <textarea id="descricao" name="descricao" class="form-control" rows="4" required 
+                          th:text="${agendamento.descricao}"></textarea>
+            </div>
+
+                <div class="mb-3">
+                    <label for="cliente" class="form-label">Cliente:</label>
+                    <select id="cliente" name="cliente.id" class="form-select" required>
+                        <option value="">Selecione um cliente</option>
+                        <option th:each="cliente : ${clientes}" 
+                                th:value="${cliente.id}" 
+                                th:text="${cliente.nome}"></option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="funcionario" class="form-label">Funcionário:</label>
+                <select id="funcionario" name="func.id" class="form-select" required>
+                    <option value="">Selecione um funcionário</option>
+                    <option th:each="funcionario : ${funcionarios}" 
+                            th:value="${funcionario.id}" 
+                            th:text="${funcionario.nome}"></option>
+                </select>
+
+               
+                    
+                    <div class="mt-4">
+                        <a th:href="@{/Agendamentos}" class="btn btn-info me-2" role="button">Voltar</a>
+                        <button type="submit" class="btn btn-success">
+                            <span th:if="${agendamento.id == null}">Cadastrar</span>
+                            <span th:if="${agendamento.id != null}">Atualizar</span>
+                        </button>
+                    </div>
+                              
+            </form>
+            <div id="success-message" style="display: none; margin-top: 10px;" class="alert alert-success">
+                Agendamento cadastrado com sucesso!
+            </div>
+            <div id="error-message" style="display: none; margin-top: 10px;" class="alert alert-danger"></div>
+
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+                <script>
+                document.getElementById("agendamento-form").addEventListener("submit", function (event) {
+            let isValid = true;
+            const errorMessages = [];
+
+            const valor = document.getElementById("valor").value;
+            const valorRegex = /^R\$\s?\d{1,3}(\.\d{3})*(,\d{2})?$/;
+            if (!valorRegex.test(valor)) {
+                errorMessages.push("Por favor, insira um valor válido no formato R$ 1.000,00.");
+                isValid = false;
+            }
+
+            const descricao = document.getElementById("descricao").value;
+            if (descricao.trim().length === 0) {
+                errorMessages.push("A descrição do serviço deve conter pelo menos um caractere.");
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault(); 
+                const errorDiv = document.getElementById("error-message");
+                errorDiv.innerHTML = errorMessages.join("<br>");
+                errorDiv.style.display = "block"; 
+            }
+        });
+        </script>
+    </body>
+</html>
